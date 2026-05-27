@@ -615,13 +615,13 @@ function renderEleves(){
       <span style="font-size:10px;color:var(--text3);font-family:Space Mono,monospace">${i+1}</span>
       <input type="text" placeholder="Prénom" value="${e.prenom}" oninput="setF(${e.id},'prenom',this.value)"
         style="font-size:13px;font-weight:500;padding:4px 6px;background:var(--bg4);border:0.5px solid var(--border2);border-radius:6px;color:var(--text);width:100%">
-      <div style="display:flex;gap:3px;justify-content:center">
+      <div style="display:flex;gap:3px;justify-content:center;align-items:center">
         <button onclick="setF(${e.id},'sexe','F');renderEleves();"
-          style="width:28px;height:28px;border-radius:6px;border:1.5px solid ${e.sexe==='F'?'#f97316':'var(--border2)'};background:${e.sexe==='F'?'rgba(249,115,22,0.18)':'var(--bg4)'};color:${e.sexe==='F'?'#f97316':'var(--text3)'};font-size:17px;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;transition:all .15s"
-          title="Fille">♀</button>
+          style="width:30px;height:30px;border-radius:6px;border:1.5px solid ${e.sexe==='F'?'#f97316':'var(--border2)'};background:${e.sexe==='F'?'rgba(249,115,22,0.18)':'var(--bg4)'};color:${e.sexe==='F'?'#f97316':'var(--text3)'};cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0"
+          title="Fille"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" style="display:block;flex-shrink:0"><circle cx="12" cy="9" r="5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12" y1="14" x2="12" y2="20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="9" y1="18" x2="15" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
         <button onclick="setF(${e.id},'sexe','G');renderEleves();"
-          style="width:28px;height:28px;border-radius:6px;border:1.5px solid ${e.sexe==='G'?'#22c55e':'var(--border2)'};background:${e.sexe==='G'?'rgba(34,197,94,0.18)':'var(--bg4)'};color:${e.sexe==='G'?'#22c55e':'var(--text3)'};font-size:17px;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;transition:all .15s"
-          title="Garçon">♂</button>
+          style="width:30px;height:30px;border-radius:6px;border:1.5px solid ${e.sexe==='G'?'#22c55e':'var(--border2)'};background:${e.sexe==='G'?'rgba(34,197,94,0.18)':'var(--bg4)'};color:${e.sexe==='G'?'#22c55e':'var(--text3)'};cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0"
+          title="Garçon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" style="display:block;flex-shrink:0"><circle cx="10" cy="13" r="5" stroke="currentColor" stroke-width="2"/><line x1="14" y1="9" x2="20" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><polyline points="16,3 20,3 20,7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       </div>
       <input type="number" step="0.1" min="0" value="${e.tDA||''}" placeholder="—"
         oninput="setF(${e.id},'tDA',parseFloat(this.value)||0)"

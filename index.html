@@ -351,13 +351,18 @@ if('serviceWorker' in navigator){const sc=`const C='nr-v1';self.addEventListener
             <button class="btn btn-sm" onclick="resetLane(1)">↺</button>
           </div>
           <div class="logline" id="sp-log1"></div>
-          <div class="save-row">
-            <select id="sp-type1">
-              <option value="tDA">Départ arrêté</option>
-              <option value="tDL">Départ lancé</option>
-            </select>
-            <button class="btn btn-save btn-sm" id="sp-save1" onclick="saveSprintTime(1)" disabled>Enregistrer</button>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px">
+            <button id="sp-dabtn1" onclick="setSPType(1,'tDA')"
+              style="padding:8px 4px;border-radius:var(--rs);border:1.5px solid var(--blue);background:var(--bluebg);color:var(--blue);font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;line-height:1.3;text-align:center;white-space:normal;display:flex;align-items:center;justify-content:center;">
+              Départ<br>arrêté
+            </button>
+            <button id="sp-dlbtn1" onclick="setSPType(1,'tDL')"
+              style="padding:8px 4px;border-radius:var(--rs);border:1.5px solid var(--border2);background:var(--bg4);color:var(--text3);font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;line-height:1.3;text-align:center;white-space:normal;display:flex;align-items:center;justify-content:center;">
+              Départ<br>lancé
+            </button>
           </div>
+          <input type="hidden" id="sp-type1" value="tDA">
+          <button class="btn btn-save" id="sp-save1" onclick="saveSprintTime(1)" disabled style="width:100%;margin-top:6px">Enregistrer</button>
         </div>
         <div class="lane" id="lane2">
           <div class="lane-hd">Couloir 2</div>
@@ -368,13 +373,18 @@ if('serviceWorker' in navigator){const sc=`const C='nr-v1';self.addEventListener
             <button class="btn btn-sm" onclick="resetLane(2)">↺</button>
           </div>
           <div class="logline" id="sp-log2"></div>
-          <div class="save-row">
-            <select id="sp-type2">
-              <option value="tDA">Départ arrêté</option>
-              <option value="tDL">Départ lancé</option>
-            </select>
-            <button class="btn btn-save btn-sm" id="sp-save2" onclick="saveSprintTime(2)" disabled>Enregistrer</button>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px">
+            <button id="sp-dabtn2" onclick="setSPType(2,'tDA')"
+              style="padding:8px 4px;border-radius:var(--rs);border:1.5px solid var(--blue);background:var(--bluebg);color:var(--blue);font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;line-height:1.3;text-align:center;white-space:normal;display:flex;align-items:center;justify-content:center;">
+              Départ<br>arrêté
+            </button>
+            <button id="sp-dlbtn2" onclick="setSPType(2,'tDL')"
+              style="padding:8px 4px;border-radius:var(--rs);border:1.5px solid var(--border2);background:var(--bg4);color:var(--text3);font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;line-height:1.3;text-align:center;white-space:normal;display:flex;align-items:center;justify-content:center;">
+              Départ<br>lancé
+            </button>
           </div>
+          <input type="hidden" id="sp-type2" value="tDA">
+          <button class="btn btn-save" id="sp-save2" onclick="saveSprintTime(2)" disabled style="width:100%;margin-top:6px">Enregistrer</button>
         </div>
       </div>
       <div class="start-bar">
@@ -384,36 +394,94 @@ if('serviceWorker' in navigator){const sc=`const C='nr-v1';self.addEventListener
 
     <!-- RELAIS -->
     <div id="panel-relais" style="display:none">
-      <div class="relay-box">
-        <div class="relay-pickers">
-          <div>
-            <label>Démarreur</label>
-            <select id="rel-dem" onchange="checkDuplicate()"><option value="">—</option></select>
+      <!-- toggle 1 / 2 couloirs -->
+      <div style="display:flex;gap:6px;margin-bottom:12px">
+        <button id="rel-lanes-1" onclick="setRelayLanes(1)"
+          style="flex:1;padding:8px;border-radius:var(--rs);border:1.5px solid var(--blue);background:var(--bluebg);color:var(--blue);font-size:13px;font-weight:600;cursor:pointer">
+          1 couloir
+        </button>
+        <button id="rel-lanes-2" onclick="setRelayLanes(2)"
+          style="flex:1;padding:8px;border-radius:var(--rs);border:1.5px solid var(--border2);background:var(--bg4);color:var(--text3);font-size:13px;font-weight:600;cursor:pointer">
+          2 couloirs
+        </button>
+      </div>
+
+      <!-- COULOIRS CONTAINER -->
+      <div id="relay-lanes-container" style="display:grid;grid-template-columns:1fr;gap:12px">
+
+        <!-- COULOIR A -->
+        <div class="relay-box" id="relay-lane-A">
+          <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px" id="rel-lane-label-A">Couloir</div>
+          <div class="relay-pickers">
+            <div>
+              <label>Démarreur</label>
+              <select id="rel-dem" onchange="checkDuplicate('A')"><option value="">—</option></select>
+            </div>
+            <div class="relay-arrow">
+              <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+            <div>
+              <label>Relayeur</label>
+              <select id="rel-rel" onchange="checkDuplicate('A')"><option value="">—</option></select>
+            </div>
           </div>
-          <div class="relay-arrow">
-            <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <div id="target-box" style="display:none;background:var(--bg4);border:0.5px solid var(--border3);border-radius:var(--rs);padding:10px 14px;margin-bottom:8px;text-align:center;">
+            <div style="font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Cible à atteindre</div>
+            <div id="target-val" style="font-family:Space Mono,monospace;font-size:26px;font-weight:700;color:var(--blue)">—</div>
+            <div id="target-detail" style="font-size:11px;color:var(--text3);margin-top:3px"></div>
           </div>
-          <div>
-            <label>Relayeur</label>
-            <select id="rel-rel" onchange="checkDuplicate()"><option value="">—</option></select>
+          <div class="alert-banner" id="dup-alert">⚠️ Ce binôme a déjà couru dans cet ordre.</div>
+          <div class="relay-chrono" id="rel-d">0.0</div>
+          <div class="relay-btns">
+            <button class="btn btn-go" id="rel-start" onclick="startRelayLane('A')">▶ Départ</button>
+            <button class="btn btn-stop" id="rel-stop" onclick="stopRelayLane('A')" disabled>⬛ Arrivée</button>
+            <button class="btn btn-sm" onclick="resetRelayLane('A')">↺</button>
+          </div>
+          <div class="relay-log" id="rel-log"></div>
+          <div class="relay-save">
+            <button class="btn btn-save" id="rel-save" onclick="saveRelayLane('A')" disabled>Enregistrer</button>
           </div>
         </div>
-        <div id="target-box" style="display:none;background:var(--bg4);border:0.5px solid var(--border3);border-radius:var(--rs);padding:10px 14px;margin-bottom:8px;text-align:center;">
-          <div style="font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Cible à atteindre</div>
-          <div id="target-val" style="font-family:Space Mono,monospace;font-size:26px;font-weight:700;color:var(--blue)">—</div>
-          <div id="target-detail" style="font-size:11px;color:var(--text3);margin-top:3px"></div>
+
+        <!-- COULOIR B (masqué par défaut) -->
+        <div class="relay-box" id="relay-lane-B" style="display:none;border:0.5px solid var(--green);background:linear-gradient(135deg,var(--bg3),var(--greenbg))">
+          <div style="font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px">Couloir B</div>
+          <div class="relay-pickers">
+            <div>
+              <label>Démarreur</label>
+              <select id="rel-dem-B" onchange="checkDuplicateB()"><option value="">—</option></select>
+            </div>
+            <div class="relay-arrow">
+              <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+            <div>
+              <label>Relayeur</label>
+              <select id="rel-rel-B" onchange="checkDuplicateB()"><option value="">—</option></select>
+            </div>
+          </div>
+          <div id="target-box-B" style="display:none;background:var(--bg4);border:0.5px solid var(--border3);border-radius:var(--rs);padding:10px 14px;margin-bottom:8px;text-align:center;">
+            <div style="font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Cible à atteindre</div>
+            <div id="target-val-B" style="font-family:Space Mono,monospace;font-size:26px;font-weight:700;color:var(--green)">—</div>
+            <div id="target-detail-B" style="font-size:11px;color:var(--text3);margin-top:3px"></div>
+          </div>
+          <div class="alert-banner" id="dup-alert-B" style="border-color:#22c55e50">⚠️ Ce binôme a déjà couru dans cet ordre.</div>
+          <div class="relay-chrono" id="rel-d-B" style="color:var(--text2)">0.0</div>
+          <div class="relay-btns">
+            <button class="btn btn-go" id="rel-start-B" onclick="startRelayLane('B')">▶ Départ</button>
+            <button class="btn btn-stop" id="rel-stop-B" onclick="stopRelayLane('B')" disabled>⬛ Arrivée</button>
+            <button class="btn btn-sm" onclick="resetRelayLane('B')">↺</button>
+          </div>
+          <div class="relay-log" id="rel-log-B"></div>
+          <div class="relay-save">
+            <button class="btn btn-save" id="rel-save-B" onclick="saveRelayLane('B')" disabled>Enregistrer</button>
+          </div>
         </div>
-        <div class="alert-banner" id="dup-alert">⚠️ Ce binôme a déjà couru dans cet ordre. Tu peux quand même enregistrer.</div>
-        <div class="relay-chrono" id="rel-d">0.00</div>
-        <div class="relay-btns">
-          <button class="btn btn-go" id="rel-start" onclick="startRelay()">▶ Départ</button>
-          <button class="btn btn-stop" id="rel-stop" onclick="stopRelay()" disabled>⬛ Arrivée</button>
-          <button class="btn btn-sm" onclick="resetRelay()">↺</button>
-        </div>
-        <div class="relay-log" id="rel-log"></div>
-        <div class="relay-save">
-          <button class="btn btn-save" id="rel-save" onclick="saveRelayTime()" disabled>Enregistrer</button>
-        </div>
+
+      </div><!-- /relay-lanes-container -->
+
+      <!-- Départ simultané (visible en mode 2 couloirs) -->
+      <div id="rel-simultane-bar" style="display:none;text-align:center;margin-top:12px">
+        <button class="btn btn-go" onclick="startBothRelays()">▶ Départ simultané</button>
       </div>
     </div>
   </div>
@@ -497,13 +565,13 @@ function loadState(){
 }
 
 const SP={run:[false,false],start:[0,0],t:[0,0],tmr:[null,null],global:false};
-const RL={run:false,start:0,t:0,tmr:null};
+// RL now defined inside relay JS section below
 let mode='sprint';
 
 /* ─────────── HELPERS ─────────── */
 function refreshSelects(){
   const opts='<option value="">—</option>'+eleves.map(e=>`<option value="${e.id}">${e.prenom||'?'}</option>`).join('');
-  ['sp-el-1','sp-el-2','rel-dem','rel-rel'].forEach(id=>{
+  ['sp-el-1','sp-el-2','rel-dem','rel-rel','rel-dem-B','rel-rel-B'].forEach(id=>{
     const s=document.getElementById(id);if(!s)return;
     const v=s.value;s.innerHTML=opts;s.value=v;
   });
@@ -549,10 +617,10 @@ function renderEleves(){
         style="font-size:13px;font-weight:500;padding:4px 6px;background:var(--bg4);border:0.5px solid var(--border2);border-radius:6px;color:var(--text);width:100%">
       <div style="display:flex;gap:3px;justify-content:center">
         <button onclick="setF(${e.id},'sexe','F');renderEleves();"
-          style="width:26px;height:26px;border-radius:6px;border:1.5px solid ${e.sexe==='F'?'#f97316':'var(--border2)'};background:${e.sexe==='F'?'rgba(249,115,22,0.18)':'var(--bg4)'};color:${e.sexe==='F'?'#f97316':'var(--text3)'};font-size:16px;cursor:pointer;line-height:1;padding:0;transition:all .15s"
+          style="width:28px;height:28px;border-radius:6px;border:1.5px solid ${e.sexe==='F'?'#f97316':'var(--border2)'};background:${e.sexe==='F'?'rgba(249,115,22,0.18)':'var(--bg4)'};color:${e.sexe==='F'?'#f97316':'var(--text3)'};font-size:17px;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;transition:all .15s"
           title="Fille">♀</button>
         <button onclick="setF(${e.id},'sexe','G');renderEleves();"
-          style="width:26px;height:26px;border-radius:6px;border:1.5px solid ${e.sexe==='G'?'#22c55e':'var(--border2)'};background:${e.sexe==='G'?'rgba(34,197,94,0.18)':'var(--bg4)'};color:${e.sexe==='G'?'#22c55e':'var(--text3)'};font-size:16px;cursor:pointer;line-height:1;padding:0;transition:all .15s"
+          style="width:28px;height:28px;border-radius:6px;border:1.5px solid ${e.sexe==='G'?'#22c55e':'var(--border2)'};background:${e.sexe==='G'?'rgba(34,197,94,0.18)':'var(--bg4)'};color:${e.sexe==='G'?'#22c55e':'var(--text3)'};font-size:17px;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;transition:all .15s"
           title="Garçon">♂</button>
       </div>
       <input type="number" step="0.1" min="0" value="${e.tDA||''}" placeholder="—"
@@ -622,6 +690,26 @@ function onSprintSelectChange(lane){
   }
   resetLane(lane);
 }
+function setSPType(lane, type){
+  document.getElementById('sp-type'+lane).value = type;
+  const daBtn = document.getElementById('sp-dabtn'+lane);
+  const dlBtn = document.getElementById('sp-dlbtn'+lane);
+  if(type === 'tDA'){
+    daBtn.style.border = '1.5px solid var(--blue)';
+    daBtn.style.background = 'var(--bluebg)';
+    daBtn.style.color = 'var(--blue)';
+    dlBtn.style.border = '1.5px solid var(--border2)';
+    dlBtn.style.background = 'var(--bg4)';
+    dlBtn.style.color = 'var(--text3)';
+  } else {
+    dlBtn.style.border = '1.5px solid var(--green)';
+    dlBtn.style.background = 'var(--greenbg)';
+    dlBtn.style.color = 'var(--green)';
+    daBtn.style.border = '1.5px solid var(--border2)';
+    daBtn.style.background = 'var(--bg4)';
+    daBtn.style.color = 'var(--text3)';
+  }
+}
 function saveSprintTime(lane){
   const sid=document.getElementById('sp-el-'+lane).value;
   if(!sid||!SP.t[lane-1])return;
@@ -670,85 +758,135 @@ function checkDuplicate(){
     tbox.style.display='none';
   }
 }
-function startRelay(){
-  if(RL.run)return;
-  const dem=document.getElementById('rel-dem').value,rel=document.getElementById('rel-rel').value;
-  if(!dem||!rel){alert('Sélectionne démarreur et relayeur.');return;}
-  if(dem===rel){alert('Deux élèves différents svp.');return;}
-  RL.start=performance.now();RL.run=true;RL.t=0;
-  document.getElementById('rel-start').disabled=true;
-  document.getElementById('rel-stop').disabled=false;
-  document.getElementById('rel-save').disabled=true;
-  document.getElementById('rel-log').textContent='En cours…';
-  document.getElementById('rel-d').className='relay-chrono running';
-  clearInterval(RL.tmr);
-  RL.tmr=setInterval(()=>{if(RL.run)document.getElementById('rel-d').textContent=fmt(performance.now()-RL.start);},50);
+/* ─── RELAIS multi-lane ─── */
+const RL={A:{run:false,start:0,t:0,tmr:null}, B:{run:false,start:0,t:0,tmr:null}};
+let relayLanesCount=1;
+
+function setRelayLanes(n){
+  relayLanesCount=n;
+  document.getElementById('relay-lane-B').style.display=n===2?'':'none';
+  document.getElementById('rel-simultane-bar').style.display=n===2?'block':'none';
+  document.getElementById('relay-lanes-container').style.gridTemplateColumns=n===2?'1fr 1fr':'1fr';
+  document.getElementById('rel-lanes-1').style.cssText=n===1
+    ?'flex:1;padding:8px;border-radius:var(--rs);border:1.5px solid var(--blue);background:var(--bluebg);color:var(--blue);font-size:13px;font-weight:600;cursor:pointer'
+    :'flex:1;padding:8px;border-radius:var(--rs);border:1.5px solid var(--border2);background:var(--bg4);color:var(--text3);font-size:13px;font-weight:600;cursor:pointer';
+  document.getElementById('rel-lanes-2').style.cssText=n===2
+    ?'flex:1;padding:8px;border-radius:var(--rs);border:1.5px solid var(--green);background:var(--greenbg);color:var(--green);font-size:13px;font-weight:600;cursor:pointer'
+    :'flex:1;padding:8px;border-radius:var(--rs);border:1.5px solid var(--border2);background:var(--bg4);color:var(--text3);font-size:13px;font-weight:600;cursor:pointer';
+  if(n===1){
+    document.getElementById('rel-lane-label-A').style.display='none';
+  } else {
+    document.getElementById('rel-lane-label-A').style.display='block';
+    document.getElementById('rel-lane-label-A').textContent='Couloir A';
+    document.getElementById('rel-lane-label-A').style.color='var(--blue)';
+  }
+  refreshSelects();
 }
-function stopRelay(){
-  if(!RL.run)return;
-  const el=performance.now()-RL.start;RL.run=false;RL.t=el;clearInterval(RL.tmr);
-  const t=fmt(el);
-  document.getElementById('rel-d').textContent=t;
-  document.getElementById('rel-d').className='relay-chrono stopped';
-  document.getElementById('rel-stop').disabled=true;
-  document.getElementById('rel-start').disabled=false;
-  document.getElementById('rel-save').disabled=false;
-  // Compute stars immediately if both athletes and their times are known
-  const demId=parseInt(document.getElementById('rel-dem').value);
-  const relId=parseInt(document.getElementById('rel-rel').value);
+
+function starsHtmlForLane(lane, demSuffix, relSuffix, elapsed){
+  const demId=parseInt(document.getElementById('rel-dem'+demSuffix).value);
+  const relId=parseInt(document.getElementById('rel-rel'+relSuffix).value);
   const eDem=eleves.find(x=>x.id===demId);
   const eRel=eleves.find(x=>x.id===relId);
-  let starsHtml='';
-  if(eDem&&eRel&&eDem.tDA>0){
-    const dDA=eDem.tDA||0;
-    const rDL=eRel.tDL||0;
-    const rDA=eRel.tDA||0;
-    const cible=rDL>0?(dDA+rDL):(dDA+rDA-0.5);
-    const val=r2(el/1000);
-    const diff=val-cible;
-    const sc=calcIT(diff);
-    const starStr='★'.repeat(sc)||'—';
-    const ecart=diff>=0?'+'+diff.toFixed(1):''+diff.toFixed(1);
-    const scCol=sc>=4?'var(--green)':sc>=3?'var(--blue)':sc>=2?'var(--amber)':'var(--red)';
-    starsHtml=`<div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-top:8px">
-      <span style="font-size:28px;color:${scCol};letter-spacing:2px">${starStr}</span>
-      <div style="text-align:left">
-        <div style="font-family:Space Mono,monospace;font-size:13px;color:${scCol};font-weight:700">${sc} étoile${sc!==1?'s':''}</div>
-        <div style="font-size:11px;color:var(--text3)">cible ${cible.toFixed(1)}s · écart ${ecart}s</div>
-      </div>
-    </div>`;
-  }
-  document.getElementById('rel-log').innerHTML='<span style="font-family:Space Mono,monospace">⏱ '+t+' s</span>'+starsHtml;
+  if(!eDem||!eRel||!eDem.tDA) return '';
+  const dDA=eDem.tDA||0, rDL=eRel.tDL||0, rDA=eRel.tDA||0;
+  const cible=rDL>0?(dDA+rDL):(dDA+rDA-0.5);
+  const val=r2(elapsed/1000);
+  const diff=val-cible;
+  const sc=calcIT(diff);
+  const starStr='★'.repeat(sc)||'—';
+  const ecart=diff>=0?'+'+diff.toFixed(1):''+diff.toFixed(1);
+  const scCol=sc>=4?'var(--green)':sc>=3?'var(--blue)':sc>=2?'var(--amber)':'var(--red)';
+  return `<div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-top:8px">
+    <span style="font-size:28px;color:${scCol};letter-spacing:2px">${starStr}</span>
+    <div style="text-align:left">
+      <div style="font-family:Space Mono,monospace;font-size:13px;color:${scCol};font-weight:700">${sc} étoile${sc!==1?'s':''}</div>
+      <div style="font-size:11px;color:var(--text3)">cible ${cible.toFixed(1)}s · écart ${ecart}s</div>
+    </div>
+  </div>`;
 }
-function resetRelay(){
-  RL.run=false;RL.t=0;clearInterval(RL.tmr);
-  document.getElementById('rel-d').textContent='0.00';
-  document.getElementById('rel-d').className='relay-chrono';
-  document.getElementById('rel-start').disabled=false;
-  document.getElementById('rel-stop').disabled=true;
-  document.getElementById('rel-save').disabled=true;
-  document.getElementById('rel-log').textContent='';
+
+function startRelayLane(lane){
+  const s=RL[lane]; if(s.run) return;
+  const demSfx=lane==='A'?'':'−B', relSfx=lane==='A'?'':'−B';
+  const demId=document.getElementById(lane==='A'?'rel-dem':'rel-dem-B').value;
+  const relId=document.getElementById(lane==='A'?'rel-rel':'rel-rel-B').value;
+  if(!demId||!relId){alert('Sélectionne démarreur et relayeur.');return;}
+  if(demId===relId){alert('Deux élèves différents svp.');return;}
+  const sfx=lane==='A'?'':'-B';
+  s.start=performance.now();s.run=true;s.t=0;
+  document.getElementById('rel-start'+sfx).disabled=true;
+  document.getElementById('rel-stop'+sfx).disabled=false;
+  document.getElementById('rel-save'+sfx).disabled=true;
+  document.getElementById('rel-log'+sfx).textContent='En cours…';
+  document.getElementById('rel-d'+sfx).className='relay-chrono running';
+  clearInterval(s.tmr);
+  s.tmr=setInterval(()=>{if(s.run)document.getElementById('rel-d'+sfx).textContent=fmt(performance.now()-s.start);},50);
 }
-function saveRelayTime(){
-  const demId=parseInt(document.getElementById('rel-dem').value);
-  const relId=parseInt(document.getElementById('rel-rel').value);
-  if(!demId||!relId||!RL.t)return;
+function stopRelayLane(lane){
+  const s=RL[lane]; if(!s.run) return;
+  const sfx=lane==='A'?'':'-B';
+  const el=performance.now()-s.start; s.run=false; s.t=el; clearInterval(s.tmr);
+  const t=fmt(el);
+  document.getElementById('rel-d'+sfx).textContent=t;
+  document.getElementById('rel-d'+sfx).className='relay-chrono stopped';
+  document.getElementById('rel-stop'+sfx).disabled=true;
+  document.getElementById('rel-start'+sfx).disabled=false;
+  document.getElementById('rel-save'+sfx).disabled=false;
+  const demSfx=lane==='A'?'':'-B', relSfx=lane==='A'?'':'-B';
+  document.getElementById('rel-log'+sfx).innerHTML='<span style="font-family:Space Mono,monospace">⏱ '+t+' s</span>'+starsHtmlForLane(lane,demSfx,relSfx,el);
+}
+function resetRelayLane(lane){
+  const s=RL[lane]; s.run=false; s.t=0; clearInterval(s.tmr);
+  const sfx=lane==='A'?'':'-B';
+  document.getElementById('rel-d'+sfx).textContent='0.0';
+  document.getElementById('rel-d'+sfx).className='relay-chrono';
+  document.getElementById('rel-start'+sfx).disabled=false;
+  document.getElementById('rel-stop'+sfx).disabled=true;
+  document.getElementById('rel-save'+sfx).disabled=true;
+  document.getElementById('rel-log'+sfx).textContent='';
+}
+function startBothRelays(){
+  startRelayLane('A'); startRelayLane('B');
+}
+function saveRelayLane(lane){
+  const sfx=lane==='A'?'':'-B';
+  const s=RL[lane];
+  const demId=parseInt(document.getElementById(lane==='A'?'rel-dem':'rel-dem-B').value);
+  const relId=parseInt(document.getElementById(lane==='A'?'rel-rel':'rel-rel-B').value);
+  if(!demId||!relId||!s.t)return;
   const eDem=eleves.find(x=>x.id==demId),eRel=eleves.find(x=>x.id==relId);if(!eDem||!eRel)return;
-  const val=r2(RL.t/1000);
-  // If this exact binome already has a course, replace it
+  const val=r2(s.t/1000);
   const existing=courses.find(c=>c.demId===demId&&c.relId===relId);
   if(existing){
     existing.time=val;existing.ts=Date.now();saveState();
   } else {
-    // Check max 4 courses per athlete
     if(getCoursesOf(demId).length>=4){alert(eDem.prenom+' a déjà 4 courses enregistrées.');return;}
     if(getCoursesOf(relId).length>=4){alert(eRel.prenom+' a déjà 4 courses enregistrées.');return;}
     courses.push({id:++courseSeq,demId,relId,time:val,ts:Date.now()});saveState();
   }
   const replaced=existing?' (remplace ancien)':'';
-  document.getElementById('rel-log').innerHTML=`⏱ ${val.toFixed(1)} s <span class="saved-chip">✓ ${eDem.prenom} & ${eRel.prenom}${replaced}</span>`;
-  document.getElementById('rel-save').disabled=true;
+  document.getElementById('rel-log'+sfx).innerHTML=`⏱ ${val.toFixed(1)} s <span class="saved-chip">✓ ${eDem.prenom} & ${eRel.prenom}${replaced}</span>`;
+  document.getElementById('rel-save'+sfx).disabled=true;
   checkDuplicate();
+}
+function checkDuplicateB(){
+  const demId=document.getElementById('rel-dem-B').value;
+  const relId=document.getElementById('rel-rel-B').value;
+  const banner=document.getElementById('dup-alert-B');
+  const tbox=document.getElementById('target-box-B');
+  if(!demId||!relId){banner.style.display='none';tbox.style.display='none';return;}
+  const dup=courses.some(c=>c.demId==demId&&c.relId==relId);
+  banner.style.display=dup?'block':'none';
+  const eDem=eleves.find(x=>x.id==demId), eRel=eleves.find(x=>x.id==relId);
+  if(eDem&&eRel&&eDem.tDA>0){
+    const tDA=eDem.tDA, rDL=eRel.tDL||0, rDA=eRel.tDA||tDA;
+    const cible=rDL>0?r2(tDA+rDL):r2(tDA+rDA-0.5);
+    const detail=rDL>0?(eDem.prenom+' DA '+tDA.toFixed(1)+' + '+eRel.prenom+' DL '+rDL.toFixed(1)):(eDem.prenom+' DA '+tDA.toFixed(1)+' + '+eRel.prenom+' DA '+rDA.toFixed(1)+' − 0.5');
+    document.getElementById('target-val-B').textContent=cible.toFixed(1)+' s';
+    document.getElementById('target-detail-B').textContent=detail;
+    tbox.style.display='block';
+  } else { tbox.style.display='none'; }
 }
 function deleteCourse(cid){
   if(!confirm('Supprimer cette performance ?'))return;

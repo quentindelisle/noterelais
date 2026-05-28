@@ -431,15 +431,41 @@ if('serviceWorker' in navigator){const sc=`const C='nr-v1';self.addEventListener
             <div id="target-detail" style="font-size:11px;color:var(--text3);margin-top:3px"></div>
           </div>
           <div class="alert-banner" id="dup-alert">⚠️ Ce binôme a déjà couru dans cet ordre.</div>
-          <div class="relay-chrono" id="rel-d">0.0</div>
-          <div class="relay-btns">
-            <button class="btn btn-go" id="rel-start" onclick="startRelayLane('A')">▶ Départ</button>
-            <button class="btn btn-stop" id="rel-stop" onclick="stopRelayLane('A')" disabled>⬛ Arrivée</button>
-            <button class="btn btn-sm" onclick="resetRelayLane('A')">↺</button>
+          <!-- Toggle chrono / manuel -->
+          <div style="display:flex;gap:5px;margin-bottom:10px">
+            <button id="rel-mode-chrono" onclick="setRelInputMode('','chrono')"
+              style="flex:1;padding:7px 6px;border-radius:var(--rs);font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid var(--blue);background:var(--blue18);color:var(--blue);transition:all .15s">
+              ⏱ Chrono
+            </button>
+            <button id="rel-mode-manuel" onclick="setRelInputMode('','manuel')"
+              style="flex:1;padding:7px 6px;border-radius:var(--rs);font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid var(--border2);background:var(--bg4);color:var(--text3);transition:all .15s">
+              ✏ Manuel
+            </button>
           </div>
-          <div class="relay-log" id="rel-log"></div>
-          <div class="relay-save">
-            <button class="btn btn-save" id="rel-save" onclick="saveRelayLane('A')" disabled>Enregistrer</button>
+
+          <!-- CHRONO SECTION -->
+          <div id="rel-chrono-section">
+            <div class="relay-chrono" id="rel-d">0.0</div>
+            <div class="relay-btns">
+              <button class="btn btn-go" id="rel-start" onclick="startRelayLane('')">▶ Départ</button>
+              <button class="btn btn-stop" id="rel-stop" onclick="stopRelayLane('' )" disabled>⬛ Arrivée</button>
+              <button class="btn btn-sm" onclick="resetRelayLane('')">↺</button>
+            </div>
+            <div class="relay-log" id="rel-log"></div>
+          </div>
+
+          <!-- MANUEL SECTION -->
+          <div id="rel-manuel-section" style="display:none">
+            <div style="display:flex;align-items:center;gap:10px;padding:14px 0">
+              <input type="number" id="rel-manuel-val" step="0.1" min="0" placeholder="ex: 13.4"
+                oninput="onManuelInput('')"
+                style="font-family:Space Mono,monospace;font-size:36px;font-weight:700;width:100%;text-align:center;background:var(--bg4);border:1.5px solid var(--blue);border-radius:var(--rs);color:var(--blue);padding:10px 8px">
+            </div>
+            <div class="relay-log" id="rel-log-m"></div>
+          </div>
+
+          <div class="relay-save" style="margin-top:8px">
+            <button class="btn btn-save" id="rel-save" onclick="saveRelayLane('A')" disabled style="width:100%">Enregistrer</button>
           </div>
         </div>
 
@@ -465,15 +491,41 @@ if('serviceWorker' in navigator){const sc=`const C='nr-v1';self.addEventListener
             <div id="target-detail-B" style="font-size:11px;color:var(--text3);margin-top:3px"></div>
           </div>
           <div class="alert-banner" id="dup-alert-B" style="border-color:#22c55e50">⚠️ Ce binôme a déjà couru dans cet ordre.</div>
-          <div class="relay-chrono" id="rel-d-B" style="color:var(--text2)">0.0</div>
-          <div class="relay-btns">
-            <button class="btn btn-go" id="rel-start-B" onclick="startRelayLane('B')">▶ Départ</button>
-            <button class="btn btn-stop" id="rel-stop-B" onclick="stopRelayLane('B')" disabled>⬛ Arrivée</button>
-            <button class="btn btn-sm" onclick="resetRelayLane('B')">↺</button>
+          <!-- Toggle chrono / manuel -->
+          <div style="display:flex;gap:5px;margin-bottom:10px">
+            <button id="rel-mode-chrono-B" onclick="setRelInputMode('-B','chrono')"
+              style="flex:1;padding:7px 6px;border-radius:var(--rs);font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid var(--green);background:var(--green18);color:var(--green);transition:all .15s">
+              ⏱ Chrono
+            </button>
+            <button id="rel-mode-manuel-B" onclick="setRelInputMode('-B','manuel')"
+              style="flex:1;padding:7px 6px;border-radius:var(--rs);font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid var(--border2);background:var(--bg4);color:var(--text3);transition:all .15s">
+              ✏ Manuel
+            </button>
           </div>
-          <div class="relay-log" id="rel-log-B"></div>
-          <div class="relay-save">
-            <button class="btn btn-save" id="rel-save-B" onclick="saveRelayLane('B')" disabled>Enregistrer</button>
+
+          <!-- CHRONO SECTION -->
+          <div id="rel-chrono-section-B">
+            <div class="relay-chrono" id="rel-d-B">0.0</div>
+            <div class="relay-btns">
+              <button class="btn btn-go" id="rel-start-B" onclick="startRelayLane('B')">▶ Départ</button>
+              <button class="btn btn-stop" id="rel-stop-B" onclick="stopRelayLane('B')" disabled>⬛ Arrivée</button>
+              <button class="btn btn-sm" onclick="resetRelayLane('B')">↺</button>
+            </div>
+            <div class="relay-log" id="rel-log-B"></div>
+          </div>
+
+          <!-- MANUEL SECTION -->
+          <div id="rel-manuel-section-B" style="display:none">
+            <div style="display:flex;align-items:center;gap:10px;padding:14px 0">
+              <input type="number" id="rel-manuel-val-B" step="0.1" min="0" placeholder="ex: 13.4"
+                oninput="onManuelInput('-B')"
+                style="font-family:Space Mono,monospace;font-size:36px;font-weight:700;width:100%;text-align:center;background:var(--bg4);border:1.5px solid var(--green);border-radius:var(--rs);color:var(--green);padding:10px 8px">
+            </div>
+            <div class="relay-log" id="rel-log-m-B"></div>
+          </div>
+
+          <div class="relay-save" style="margin-top:8px">
+            <button class="btn btn-save" id="rel-save-B" onclick="saveRelayLane('B')" disabled style="width:100%">Enregistrer</button>
           </div>
         </div>
 
@@ -1200,6 +1252,68 @@ function renderSuivi(){
   }
 
   div.innerHTML=html;
+}
+/* ─── Relay input mode (chrono / manuel) ─── */
+const relInputMode={A:'chrono', B:'chrono'};
+
+function setRelInputMode(sfx, mode){
+  const lane = sfx===''?'A':'B';
+  relInputMode[lane]=mode;
+  const chronoSec = document.getElementById('rel-chrono-section'+sfx);
+  const manuelSec = document.getElementById('rel-manuel-section'+sfx);
+  const chronoBtn = document.getElementById('rel-mode-chrono'+sfx);
+  const manuelBtn = document.getElementById('rel-mode-manuel'+sfx);
+  const accent = lane==='A'?'var(--blue)':'var(--green)';
+  const accentBg = lane==='A'?'var(--bluebg)':'var(--greenbg)';
+  if(mode==='chrono'){
+    chronoSec.style.display='';
+    manuelSec.style.display='none';
+    chronoBtn.style.cssText=`flex:1;padding:7px 6px;border-radius:var(--rs);font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid ${accent};background:${accentBg};color:${accent};transition:all .15s`;
+    manuelBtn.style.cssText='flex:1;padding:7px 6px;border-radius:var(--rs);font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid var(--border2);background:var(--bg4);color:var(--text3);transition:all .15s';
+    // reset save button
+    document.getElementById('rel-save'+sfx).disabled=true;
+  } else {
+    chronoSec.style.display='none';
+    manuelSec.style.display='';
+    manuelBtn.style.cssText=`flex:1;padding:7px 6px;border-radius:var(--rs);font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid ${accent};background:${accentBg};color:${accent};transition:all .15s`;
+    chronoBtn.style.cssText='flex:1;padding:7px 6px;border-radius:var(--rs);font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid var(--border2);background:var(--bg4);color:var(--text3);transition:all .15s';
+    document.getElementById('rel-save'+sfx).disabled=true;
+  }
+}
+
+function onManuelInput(sfx){
+  const val=parseFloat(document.getElementById('rel-manuel-val'+sfx).value);
+  const lane=sfx===''?'A':'B';
+  const saveBtn=document.getElementById('rel-save'+sfx);
+  if(!isNaN(val)&&val>0){
+    // store in RL so saveRelayLane can read it
+    RL[lane].t=val*1000;
+    saveBtn.disabled=false;
+    // show stars preview
+    const demId=parseInt(document.getElementById(lane==='A'?'rel-dem':'rel-dem-B').value);
+    const relId=parseInt(document.getElementById(lane==='A'?'rel-rel':'rel-rel-B').value);
+    const eDem=eleves.find(x=>x.id===demId), eRel=eleves.find(x=>x.id===relId);
+    let logHtml='';
+    if(eDem&&eRel&&eDem.tDA>0){
+      const dDA=eDem.tDA, rDL=eRel.tDL||0, rDA=eRel.tDA||0;
+      const cible=rDL>0?(dDA+rDL):(dDA+rDA-0.5);
+      const diff=val-cible;
+      const sc=calcIT(diff);
+      const starStr='★'.repeat(sc)||'—';
+      const ecart=diff>=0?'+'+diff.toFixed(1):''+diff.toFixed(1);
+      const scCol=sc>=4?'var(--green)':sc>=3?'var(--blue)':sc>=2?'var(--amber)':'var(--red)';
+      logHtml=`<div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+        <span style="font-size:22px;color:${scCol}">${starStr}</span>
+        <span style="font-size:12px;color:${scCol};font-weight:600">${sc} étoile${sc!==1?'s':''}</span>
+        <span style="font-size:11px;color:var(--text3)">cible ${cible.toFixed(1)}s · écart ${ecart}s</span>
+      </div>`;
+    }
+    document.getElementById('rel-log-m'+sfx).innerHTML=logHtml;
+  } else {
+    RL[lane].t=0;
+    saveBtn.disabled=true;
+    document.getElementById('rel-log-m'+sfx).innerHTML='';
+  }
 }
 /* ─────────── NAV ─────────── */
 function goPage(id){
